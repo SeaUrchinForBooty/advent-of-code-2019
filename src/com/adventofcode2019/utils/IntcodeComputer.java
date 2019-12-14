@@ -13,12 +13,12 @@ public class IntcodeComputer {
 	int[] intcodeProgram;
 	
 	// Constructor
-	IntcodeComputer() {
+	public IntcodeComputer() {
 		this.fileLocation = null;
 		this.intcodeProgram = null;
 	}
 	
-	IntcodeComputer(String fileLocation) {
+	public IntcodeComputer(String fileLocation) {
 		setFileLocation(fileLocation);
 		convertFileToProgram();
 	}

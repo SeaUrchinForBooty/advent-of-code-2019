@@ -1,4 +1,4 @@
-package com.adventofcode2019.day03;
+package com.adventofcode2019.utils;
 
 import java.io.BufferedWriter;
 

@@ -1,4 +1,4 @@
-package com.adventofcode2019.day02;
+package com.adventofcode2019.utils;
 
 import java.io.BufferedReader;
 import java.io.File;

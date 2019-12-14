@@ -1,5 +1,7 @@
 package com.adventofcode2019.day02;
 
+import com.adventofcode2019.utils.IntcodeComputer;
+
 public class DayTwo {
 	
 	private final static int magicNumber = 19690720;

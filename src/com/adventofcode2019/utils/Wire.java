@@ -1,4 +1,4 @@
-package com.adventofcode2019.day03;
+package com.adventofcode2019.utils;
 
 import java.lang.Math;
 
@@ -10,9 +10,6 @@ public class Wire {
 		private int steps; // steps is an integer number
 		
 		// Constructors
-		Directions() {
-		}
-		
 		Directions(char direction, int steps) {
 			setDirection(direction);
 			setSteps(steps);

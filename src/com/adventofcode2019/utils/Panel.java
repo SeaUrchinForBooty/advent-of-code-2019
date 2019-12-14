@@ -1,4 +1,4 @@
-package com.adventofcode2019.day03;
+package com.adventofcode2019.utils;
 
 public class Panel extends Grid{
 

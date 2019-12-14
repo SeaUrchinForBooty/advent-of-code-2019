@@ -1,15 +1,9 @@
-package com.adventofcode2019.day03;
+package com.adventofcode2019.utils;
 
 import java.io.BufferedReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.adventofcode2019.day03.Panel;
-import com.adventofcode2019.day03.Wire;
-import com.adventofcode2019.utils.FileUtils;
 
 
 // TOP LEVEL CLASS

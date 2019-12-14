@@ -1,5 +1,6 @@
 package com.adventofcode2019.day03;
 
+import com.adventofcode2019.utils.FuelManagementSystem;
 
 public class DayThree {
 	
@@ -9,7 +10,6 @@ public class DayThree {
 	private final static String outputFileName = "day03.output";
 	private final static String inputFile = currDir + pckg + inputFileName;
 	private final static String outputFile = currDir + pckg + outputFileName;
-	
 	
 	public static int partOne() {
 		FuelManagementSystem fms = 

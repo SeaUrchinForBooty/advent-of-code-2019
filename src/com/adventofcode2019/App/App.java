@@ -16,17 +16,7 @@ public class App{
 		System.out.println("Day 2, part 2: " + DayTwo.partTwo());
 		
 		// Day 3
-		
-		String currDir = System.getProperty("user.dir");
-		String pckg = "/src/com/adventofcode2019/day03/";
-		String inputFileName = "day03.input";
-		String outputFileName = "day03.output";
-		String inputFile = currDir + pckg + inputFileName;
-		String outputFile = currDir + pckg + outputFileName;
-		
-		int result = DayThree.partOne(inputFile, outputFile);
-		System.out.println("Day 3, part 1: " + result);
-		result = DayThree.partTwo(inputFile, outputFile);
-		System.out.println("Day 3, part 2: " + result);
+		System.out.println("Day 3, part 1: " + DayThree.partOne());
+		System.out.println("Day 3, part 2: " + DayThree.partTwo());
 	}
 }

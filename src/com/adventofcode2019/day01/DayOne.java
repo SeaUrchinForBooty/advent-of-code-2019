@@ -1,61 +1,21 @@
 package com.adventofcode2019.day01;
 
+import com.adventofcode2019.utils.FileUtils;
+
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class DayOne {
 	
-	private BufferedReader br;
+	private static final String currDir = System.getProperty("user.dir");
+	private static final String path = "/src/com/adventofcode2019/day01/";
+	private static final String fileName = "day01.input";
+	private static final String inputFile = currDir + path + fileName;
 	
-	// Constructor
-	private DayOne() {
-		setBr(null);
-	}
-
-	// Getters and setters
-	private BufferedReader getBr() {
-		return this.br;
-	}
 	
-	private void setBr(BufferedReader br) {
-		this.br = br;
-	}
-	
-	// Methods
-	private void openFile() {
-		String currDir = System.getProperty("user.dir");
-		String path = "/src/com/adventofcode2019/day01/";
-		String fileName = "day01.input";
-		String fileLocation = currDir + path + fileName;
-		File file = new File(fileLocation);
-		BufferedReader br = null;
-		
-		try {
-			br = new BufferedReader(new FileReader(file));
-			setBr(br);
-		} catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	private void closeFile() {
-		BufferedReader br = getBr();
-		try {
-			br.close();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
-	// computes fuel need
+	//Methods
 	private static Integer computeFuelNeed(Integer aux) {
 		
-		Integer fuelNeed = 0;
+		int fuelNeed = 0;
 		
 		while( (aux = (aux/3 - 2)) > 0) {
 			fuelNeed = fuelNeed + aux;
@@ -63,49 +23,42 @@ public class DayOne {
 		return fuelNeed;
 	}
 	
+	
 	public static Integer partOne() {
 		
-		DayOne dO = new DayOne();
+		BufferedReader br = null;
 		String st = null;
-		int sum = -1;
-		
-		dO.openFile(); // Opens file and stores BufferedReader
+		int sum = 0;
 
-		// Reads the files and does the math
-		try {
-			while((st = dO.getBr().readLine()) != null ) {
-				int aux = Integer.parseInt(st);
-				sum = sum + aux/3 - 2 ;
-			}
-		}catch(IOException e) {
-			e.printStackTrace();
+		// Opens a BufferedReader br
+		br = FileUtils.openBufferedReader(inputFile);
+		
+		// Where the magic happens
+		while((st = FileUtils.readBufferedReader(br, 2)) != null ) {
+			int aux = Integer.parseInt(st);
+			sum = sum + aux/3 - 2 ;
 		}
 		
-		dO.closeFile(); // Closes BufferedReader
+		// Closes BufferedReader br
+		FileUtils.closeBufferedReader(br);
 		
 		return sum;
 	}
 	
 	
 	public static Integer partTwo() {
-		
-		DayOne dO = new DayOne();
+		BufferedReader br = null;
 		String st = null;
 		Integer totalFuel = 0;
+
+		br = FileUtils.openBufferedReader(inputFile);
 		
-		dO.openFile();
 		// Where the magic happens
-		try {
-			while((st = dO.getBr().readLine()) != null) {
-				Integer fuel = Integer.parseInt(st);
-				totalFuel = totalFuel + computeFuelNeed(fuel);
-			}
-		} catch(IOException e) {
-			e.printStackTrace();
+		while((st = FileUtils.readBufferedReader(br, 2)) != null) {
+			Integer fuel = Integer.parseInt(st);
+			totalFuel = totalFuel + computeFuelNeed(fuel);
 		}
-		
-		// Tries closing BufferedReader br
-		dO.closeFile();
+		FileUtils.closeBufferedReader(br);
 		
 		return totalFuel;
 	}

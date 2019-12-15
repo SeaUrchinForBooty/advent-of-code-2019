@@ -4,6 +4,7 @@ import com.adventofcode2019.day01.*;
 import com.adventofcode2019.day02.*;
 import com.adventofcode2019.day03.*;
 import com.adventofcode2019.day04.*;
+import com.adventofcode2019.day05.*;
 
 public class App{
 	
@@ -20,13 +21,16 @@ public class App{
 		// Day 3
 		System.out.println("Day 3, part 1: " + DayThree.partOne());
 		System.out.println("Day 3, part 2: " + DayThree.partTwo());
-		*/
 		
 		// Day 4
 		System.out.println("Day 4, part 1: " + DayFour.partOne());
 		System.out.println("Day 4, part 2: " + DayFour.partTwo());
-		
+
 		// Day 5
+		System.out.println("Day 5, part 1: " + DayFive.partOne());
+		System.out.println("Day 5, part 2: " + DayFive.partTwo());
+		 */
+		
 		
 	}
 }

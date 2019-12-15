@@ -1,128 +1,155 @@
 package com.adventofcode2019.utils;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class IntcodeComputer {
 	
-	String fileLocation;
-	int[] intcodeProgram;
+	private int[] program;
 	
 	// Constructor
 	public IntcodeComputer() {
-		this.fileLocation = null;
-		this.intcodeProgram = null;
 	}
 	
-	public IntcodeComputer(String fileLocation) {
-		setFileLocation(fileLocation);
-		convertFileToProgram();
+	public IntcodeComputer(String inputFile) {
+		loadProgram(inputFile);
 	}
 	
-	// getters and setters
-	public String getFileLocation() {
-		return this.fileLocation;
+	// Getters
+	public int[] getProgram() {
+		return this.program;
 	}
-	
-	public int[] getIntcodeProgram() {
-		return this.intcodeProgram;
+
+	// Setters
+	public void setProgram(int[] program) {
+		this.program = program;
 	}
-	
-	public void setFileLocation(String fileLocation) {
-		this.fileLocation = fileLocation;
-	}
-	
-	public void setIntcodeProgram(int[] program) {
-		this.intcodeProgram = program;
-	}
-	
 	
 	// creates program based on input file
-	public void convertFileToProgram() {
+	public void loadProgram(String inputFile) {
+		String[] strProgram = null;
 		
-		String fileLocation = getFileLocation();
-		int[] intcodeProgram = null;
-		
-		File file = new File(fileLocation);
 		BufferedReader br = null;
 		String st = null;
-		String[] values = null;
-		
-		// Creates BufferedReader
-		try{
-			br = new BufferedReader(new FileReader(file));
-		} catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		// Creates value
-		try {
-			if((st = br.readLine()) != null)
-				// reads the only line from the file
-				// splits the values and stores in values
-				values = st.split(","); 
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		
 
+		// Creates BufferedReader
+		br = FileUtils.openBufferedReader(inputFile);
 		
-		//Tries to close the BufferedReader
-		try {
-			br.close();
-		} catch(IOException e){
-			e.printStackTrace();
-		}
+		// create strProgram array
+		if((st = FileUtils.readBufferedReader(br,2)) != null)
+			strProgram = st.split(",");
 		
+		// Closes BufferedReader
+		FileUtils.closeBufferedReader(br);
 		
 		// where the magic happens
-		//creates the program based on values size
-		intcodeProgram = new int[values.length]; 
-		
-		// Stores the values in the program by parsing
-		for(int i = 0; i < values.length; i++)
-			intcodeProgram[i] = Integer.parseInt(values[i]);
-		
-		setIntcodeProgram(intcodeProgram); // stores the program in class variable
+		program = new int[strProgram.length]; 
+		for(int i = 0; i < program.length; i++)
+			program[i] = Integer.parseInt(strProgram[i]);
 	}
 	
-	public int getIntcodeProgramValue(int position) {
-		int[] intcodeProgram = getIntcodeProgram();
-		return intcodeProgram[position];
+	public int getProgramValue(int adress) {
+		return program[adress];
 	}
 	
+	public void setProgramValue(int adress, int value) {
+		program[adress] = value;
+	}
 	
-	public void runIntcodeProgram() {
-		int[] intcodeProgram = getIntcodeProgram();
-		
+	public int runProgram(int inputVar) {
 		boolean run = true;
-		int iPointer = 0; //instruction pointer initialized with adress 0
+		int ptr = 0; // Program pointer
 		int opCode = 0;
-		int par1Value = 0; //initialize parameter 1 value with 0
-		int par2Value = 0; //initialize parameter 2 value with 0
-		int par3Value = 0; //initialize parameter 3 value with 0
+		int[] modes = {0,0,0,0,0}; //parameters ABCDE
+		int[] parameter = {0,0,0}; // entry values
+		int outputVar = 0; // output value
 		
 		while(run) {
-			opCode = intcodeProgram[iPointer];
-			par1Value = intcodeProgram[iPointer+1];
-			par2Value = intcodeProgram[iPointer+2];
-			par3Value = intcodeProgram[iPointer+3];
+			modes = readParameters(program[ptr]);
+			opCode = modes[3] == 9 ? 99 : modes[4];
 			
 			switch(opCode) {
 			case 1:
-				intcodeProgram[par3Value] = intcodeProgram[par1Value] +
-						intcodeProgram[par2Value];
-				iPointer+=4;
+				parameter[0] = modes[2] == 0 ? 
+						program[program[ptr+1]] : program[ptr+1];
+						
+				parameter[1] = modes[1] == 0 ? 
+						program[program[ptr+2]] : program[ptr+2];
+						
+				program[program[ptr+3]] = parameter[0] + parameter[1];
+				ptr += 4;
 				break;
 				
 			case 2:
-				intcodeProgram[par3Value] = intcodeProgram[par1Value] *
-				intcodeProgram[par2Value];
-				iPointer+=4;
+				parameter[0] = modes[2] == 0 ? 
+						program[program[ptr+1]] : program[ptr+1];
+						
+				parameter[1] = modes[1] == 0 ? 
+						program[program[ptr+2]] : program[ptr+2];
+						
+				program[program[ptr+3]] = parameter[0] * parameter[1];
+				ptr += 4;
+				break;
+			
+			case 3:
+				program[program[ptr+1]] = inputVar;
+				ptr += 2;
+				break;
+				
+			case 4:
+				outputVar = program[program[ptr+1]];
+				ptr += 2;
+				break;
+			
+			case 5:
+				parameter[0] = modes[2] == 0 ? 
+						program[program[ptr+1]] : program[ptr+1];
+						
+				parameter[1] = modes[1] == 0 ? 
+						program[program[ptr+2]] : program[ptr+2];
+						
+				ptr = parameter[0] != 0 ? parameter[1] : ptr + 3;
+				break;
+				
+			case 6:
+				parameter[0] = modes[2] == 0 ? 
+						program[program[ptr+1]] : program[ptr+1];
+						
+				parameter[1] = modes[1] == 0 ? 
+						program[program[ptr+2]] : program[ptr+2];
+						
+				ptr = parameter[0] == 0 ? parameter[1] : ptr + 3;
+				break;
+				
+			case 7:
+				parameter[0] = modes[2] == 0 ? 
+						program[program[ptr+1]] : program[ptr+1];
+						
+				parameter[1] = modes[1] == 0 ? 
+						program[program[ptr+2]] : program[ptr+2];
+				
+				if(parameter[0] < parameter[1])
+					program[program[ptr+3]] = 1;
+				else
+					program[program[ptr+3]] = 0;
+				
+				ptr += 4;
+				break;
+				
+			case 8:
+				parameter[0] = modes[2] == 0 ? 
+						program[program[ptr+1]] : program[ptr+1];
+						
+				parameter[1] = modes[1] == 0 ? 
+						program[program[ptr+2]] : program[ptr+2];
+				
+				if(parameter[0] == parameter[1])
+					program[program[ptr+3]] = 1;
+				else
+					program[program[ptr+3]] = 0;
+				
+				ptr += 4;
 				break;
 				
 			case 99: run = false;
@@ -131,17 +158,29 @@ public class IntcodeComputer {
 				default: System.out.println("WATCHOUT!");
 			}
 		}
-		
-		setIntcodeProgram(intcodeProgram);
+		return outputVar;
 	}
 	
-	
-	public void setIntcodeProgramValue(int position, int value) {
-		int[] intcodeProgram = getIntcodeProgram();
+	private int[] readParameters(int number) {
 		
-		intcodeProgram[position] = value;
-		setIntcodeProgram(intcodeProgram);
+		List<Integer> digitsList = new ArrayList<>();
+		int[] digits = new int[5];
+		int i = 0, dlSize = 0;
+		
+		// initializing digits with zero values
+		for(i = 0; i < 5; i ++)
+			digits[i] = 0;
+
+		while(number > 0) {
+			digitsList.add(number % 10);
+			number = number / 10;
+		}
+		
+		dlSize = digitsList.size(); // digitsList size
+		for(i = 0; i <dlSize; i++)
+			digits[(5-1) - i] = digitsList.remove(0);
+		
+		digitsList.clear();	// Just making sure all the garbage is cleared
+		return digits;
 	}
 }
-
-

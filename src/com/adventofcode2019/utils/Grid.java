@@ -2,8 +2,6 @@ package com.adventofcode2019.utils;
 
 import java.io.BufferedWriter;
 
-import com.adventofcode2019.utils.*;
-
 public class Grid {
 	
 	private int[][] grid;
